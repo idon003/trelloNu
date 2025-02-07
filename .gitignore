@@ -1,0 +1,80 @@
+### Existing Rules ###
+
+HELP.md
+target/
+!.mvn/wrapper/maven-wrapper.jar
+!**/src/main/**/target/
+!**/src/test/**/target/
+
+### STS ###
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings
+.springBeans
+.sts4-cache
+
+### IntelliJ IDEA ###
+.idea
+*.iws
+*.iml
+*.ipr
+
+### NetBeans ###
+/nbproject/private/
+/nbbuild/
+/dist/
+/nbdist/
+/.nb-gradle/
+build/
+!**/src/main/**/build/
+!**/src/test/**/build/
+
+### VS Code ###
+.vscode/
+
+### Additions for User Service ###
+
+# Logs
+logs/
+*.log
+*.out
+*.err
+spring.log
+
+# Sensitive Files
+.env
+*.env
+application.properties
+application.yml
+# Optionally, ignore encrypted configs (if applicable)
+application-*.yml
+
+# Docker
+.dockerignore
+docker-compose.override.yml
+docker-compose.override.yaml
+*.pid
+pgdata/
+
+# PostgreSQL
+*.sql  # Ignore raw SQL dumps (optional)
+*.dump # Ignore database dump files
+pgdata/ # Ignore local database storage for containers
+
+# Temporary Files
+*.tmp
+*.swp
+*.swo
+*.bak
+
+# Operating System
+.DS_Store
+Thumbs.db
+
+# Maven
+target/
+dependency-reduced-pom.xml
+release.properties
+releases/
