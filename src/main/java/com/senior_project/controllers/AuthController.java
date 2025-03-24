@@ -25,7 +25,7 @@ public class AuthController {
     @Operation(summary = "Register a new user", description = "Registers a new user with the system.")
     @PostMapping("/register")
     public ResponseEntity<Map<String, String>> registerUser(@RequestBody @Valid RegisterRequest request) {
-        userService.register(request); // Delegates the registration logic to the service.
+        userService.register(request);
         return ResponseEntity.ok(Map.of("message", "User registered successfully!"));
     }
 

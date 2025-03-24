@@ -16,7 +16,8 @@ import java.util.UUID;
         name = "tickets",
         indexes = {
                 @Index(name = "idx_ticket_status", columnList = "status"),
-                @Index(name = "idx_ticket_role", columnList = "assignedRole")
+                @Index(name = "idx_ticket_role", columnList = "assignedRole"),
+                @Index(name = "idx_role_status", columnList = "assignedRole, status")
         }
 )
 @Data
@@ -46,7 +47,6 @@ public class Ticket {
     @Column(nullable = false)
     private UUID createdBy; // user who created the ticket
 
-    @Column(nullable = true)
     private UUID assignedTo; // can be null at pending state then assigned to a faculty user
 
     @Enumerated(EnumType.STRING)
@@ -56,13 +56,13 @@ public class Ticket {
     private LocalDateTime updatedAt;
 
     @PrePersist
-    protected void onCreate() {
+    public void onCreate() {
         this.createdAt = LocalDateTime.now();
         this.updatedAt = LocalDateTime.now();
     }
 
     @PreUpdate
-    protected void onUpdate() {
+    public void onUpdate() {
         this.updatedAt = LocalDateTime.now();
     }
 

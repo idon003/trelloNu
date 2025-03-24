@@ -102,7 +102,7 @@ public class UserService {
 
         user.setPassword(passwordEncoder.encode(request.getNewPassword()));
         userRepository.save(user);
-
+//        emailService.sendEmail(user.getEmail(), "Password changed", "Password changed successfully!");
 //        notificationService.sendPasswordChangeNotification(user.getEmail());
     }
 
