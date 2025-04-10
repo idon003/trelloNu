@@ -74,7 +74,6 @@ pgdata/ # Ignore local database storage for containers
 Thumbs.db
 
 # Maven
-target/
 dependency-reduced-pom.xml
 release.properties
 releases/

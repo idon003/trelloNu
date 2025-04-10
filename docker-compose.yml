@@ -1,28 +1,31 @@
 services:
-#  user-service:
-#    build:
-#      context: .
-#      dockerfile: Dockerfile
-#    ports:
-#      - "8080:8080"
-#    environment:
-#      SPRING_DATASOURCE_URL: jdbc:postgresql://database:5432/senior_project
-#      SPRING_DATASOURCE_USERNAME: postgres
-#      SPRING_DATASOURCE_PASSWORD: postgres
-#      SPRING_MAIL_HOST: smtp.gmail.com
-#      SPRING_MAIL_USERNAME: your-email@gmail.com
-#      SPRING_MAIL_PASSWORD: your-email-password
-#    depends_on:
-#      - database
-  postgres-db:
-    image: postgres:17.0
-#    container-name: postgres-db
-#    restart: always
+  backend:
+    build: .
+    container_name: uni-trello-backend
     ports:
-      - "5434:5434"
+      - "8080:8080"
+    depends_on:
+      - db
+    env_file:
+      - .env
+    networks:
+      - university_net
+  db:
+    image: postgres:17
+    container_name: university_postgres
     environment:
-      POSTGRES_DB: university-db
+      POSTGRES_DB: university_db
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: qazplm
+    ports:
+      - "5434:5434"
     volumes:
-      - ./data:/var/lib/postgresql/data
+      - db_data:/var/lib/postgresql/data
+    networks:
+      - university_net
+
+volumes:
+  db_data:
+
+networks:
+  university_net:
