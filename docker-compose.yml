@@ -1,3 +1,4 @@
+version: "3.8"
 services:
   backend:
     build: .
@@ -6,19 +7,23 @@ services:
       - "8080:8080"
     depends_on:
       - db
-    env_file:
-      - .env
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/university_db
+      - SPRING_DATASOURCE_USERNAME=postgres
+      - SPRING_DATASOURCE_PASSWORD=qazplm
+      - SPRING_JPA_HIBERNATE_DDL_AUTO=update
     networks:
       - university_net
+
   db:
     image: postgres:17
-    container_name: university_postgres
+    container_name: db
     environment:
       POSTGRES_DB: university_db
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: qazplm
     ports:
-      - "5434:5434"
+      - "5434:5432"  # Exposing port 5433 to the host, container listens on 5432
     volumes:
       - db_data:/var/lib/postgresql/data
     networks:
@@ -29,3 +34,4 @@ volumes:
 
 networks:
   university_net:
+    driver: bridge

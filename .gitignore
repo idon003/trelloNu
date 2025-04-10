@@ -44,7 +44,6 @@ logs/
 spring.log
 
 # Sensitive Files
-.env
 *.env
 application.properties
 application.yml
