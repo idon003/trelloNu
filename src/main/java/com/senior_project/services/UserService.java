@@ -19,7 +19,7 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 public class UserService {
-    private final EmailService emailService;
+    // private final EmailService emailService;
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
