@@ -4,29 +4,30 @@ services:
     container_name: uni-trello-backend
     ports:
       - "8080:8080"
-    depends_on:
-      - db
     environment:
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/university_db
-      - SPRING_DATASOURCE_USERNAME=postgres
-      - SPRING_DATASOURCE_PASSWORD=qazplm
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://dpg-cvrvdj49c44c73dcriu0-a.oregon-postgres.render.com:5432/trello_db_3aoh
+      - SPRING_DATASOURCE_USERNAME=trello_db_3aoh_user
+      - SPRING_DATASOURCE_PASSWORD=x7SlHdeaKEwt1WfR0sIARfLFHxmJf3R1
       - SPRING_JPA_HIBERNATE_DDL_AUTO=update
+      - LOGGING_LEVEL_ROOT=WARN
+      - LOGGING_LEVEL_ORG_HIBERNATE_SQL=OFF
+      - LOGGING_LEVEL_ORG_SPRINGFRAMEWORK=INFO
     networks:
       - university_net
 
-  db:
-    image: postgres:17
-    container_name: db
-    environment:
-      POSTGRES_DB: university_db
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: qazplm
-    ports:
-      - "5434:5432"  # Exposing port 5433 to the host, container listens on 5432
-    volumes:
-      - db_data:/var/lib/postgresql/data
-    networks:
-      - university_net
+#  db:
+#    image: postgres:16
+#    container_name: db
+#    environment:
+#      POSTGRES_DB: university_db
+#      POSTGRES_USER: postgres
+#      POSTGRES_PASSWORD: qazplm
+#    ports:
+#      - "5432:5432"  # Exposing port 5433 to the host, container listens on 5432
+#    volumes:
+#      - db_data:/var/lib/postgresql/data
+#    networks:
+#      - university_net
 
 volumes:
   db_data:
