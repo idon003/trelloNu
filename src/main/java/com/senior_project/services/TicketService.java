@@ -23,7 +23,7 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class TicketService {
     private final TicketRepository ticketRepository;
-    private final EmailService emailService;
+    // private final EmailService emailService;
     private final UserRepository userRepository;
     private final ChatRepository chatRepository;
     private final ChatService chatService;
@@ -105,8 +105,8 @@ public class TicketService {
         if (isAssignedUser) {
             existingTicket.setStatus(ticketUpdateDTO.getStatus());
 
-            User creator = find(existingTicket.getCreatedBy());
-            emailService.sendEmail(creator.getEmail(), "Status changed to " + ticketUpdateDTO.getStatus(), "Dear " + creator.getFirstName() + " " + creator.getLastName() + ", your ticket '" + existingTicket.getTitle() + "' status has changed to " + ticketUpdateDTO.getStatus() + ".");
+            // User creator = find(existingTicket.getCreatedBy());
+            // emailService.sendEmail(creator.getEmail(), "Status changed to " + ticketUpdateDTO.getStatus(), "Dear " + creator.getFirstName() + " " + creator.getLastName() + ", your ticket '" + existingTicket.getTitle() + "' status has changed to " + ticketUpdateDTO.getStatus() + ".");
         }
 
         if (!isCreator && !isAssignedUser) {
