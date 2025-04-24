@@ -23,7 +23,7 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class TicketService {
     private final TicketRepository ticketRepository;
-    // private final EmailService emailService;
+    //    private final EmailService emailService;
     private final UserRepository userRepository;
     private final ChatRepository chatRepository;
     private final ChatService chatService;
@@ -72,7 +72,6 @@ public class TicketService {
     }
 
 
-
     // Get tickets created by a user
     public List<Ticket> getTicketsCreatedBy(UUID userId) {
         return ticketRepository.findByCreatedBy(userId);
@@ -84,8 +83,8 @@ public class TicketService {
     }
 
     // Get tickets assigned to a specific user with a status
-    public List<Ticket> getTicketsAssignedTo(UUID userId, TicketStatus status) {
-        return ticketRepository.findByAssignedToAndStatus(userId, status);
+    public Page<Ticket> getTicketsAssignedTo(UUID userId, TicketStatus status, Pageable pageable) {
+        return ticketRepository.findByAssignedToAndStatus(userId, status, pageable);
     }
 
     // Update a ticket (only creator or assigned user can update)
@@ -105,8 +104,8 @@ public class TicketService {
         if (isAssignedUser) {
             existingTicket.setStatus(ticketUpdateDTO.getStatus());
 
-            // User creator = find(existingTicket.getCreatedBy());
-            // emailService.sendEmail(creator.getEmail(), "Status changed to " + ticketUpdateDTO.getStatus(), "Dear " + creator.getFirstName() + " " + creator.getLastName() + ", your ticket '" + existingTicket.getTitle() + "' status has changed to " + ticketUpdateDTO.getStatus() + ".");
+//            User creator = find(existingTicket.getCreatedBy());
+//            emailService.sendEmail(creator.getEmail(), "Status changed to " + ticketUpdateDTO.getStatus(), "Dear " + creator.getFirstName() + " " + creator.getLastName() + ", your ticket '" + existingTicket.getTitle() + "' status has changed to " + ticketUpdateDTO.getStatus() + ".");
         }
 
         if (!isCreator && !isAssignedUser) {
@@ -137,7 +136,7 @@ public class TicketService {
     }
 
     public Ticket getTicketById(UUID ticketId) {
-        
+
         return ticketRepository.findById(ticketId).orElseThrow(() -> new IllegalArgumentException("Ticket not found!"));
     }
 
@@ -145,4 +144,7 @@ public class TicketService {
         return ticketRepository.findAll(pageable);
     }
 
+    public Page<Ticket> getCompletedTicketsByUser(UUID userId, Pageable pageable) {
+        return ticketRepository.findByAssignedToAndStatus(userId, TicketStatus.COMPLETED, pageable);
+    }
 }
