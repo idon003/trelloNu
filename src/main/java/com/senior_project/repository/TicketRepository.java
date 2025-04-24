@@ -16,13 +16,40 @@ import java.util.UUID;
 public interface TicketRepository extends JpaRepository<Ticket, UUID> {
     List<Ticket> findByCreatedBy(UUID createdBy);
 
+    @Query("""
+                SELECT t FROM Ticket t
+                WHERE t.assignedTo = :userId AND t.status = :status
+                ORDER BY CASE t.priority
+                    WHEN 'HIGH' THEN 1
+                    WHEN 'MEDIUM' THEN 2
+                    WHEN 'LOW' THEN 3
+                    ELSE 4
+                END
+            """)
+    Page<Ticket> findByAssignedToAndStatus(UUID assignedTo, TicketStatus status, Pageable pageable);
 
-    List<Ticket> findByAssignedToAndStatus(UUID assignedTo, TicketStatus status);
-
-    @Query("SELECT t FROM Ticket t WHERE t.createdBy = :userId AND t.status = :status")
+    @Query("""
+                SELECT t FROM Ticket t
+                WHERE t.createdBy = :userId AND t.status = :status
+                ORDER BY CASE t.priority
+                    WHEN 'HIGH' THEN 1
+                    WHEN 'MEDIUM' THEN 2
+                    WHEN 'LOW' THEN 3
+                    ELSE 4
+                END
+            """)
     Page<Ticket> findByCreatedByAndStatus(@Param("userId") UUID userId, @Param("status") TicketStatus status, Pageable pageable);
 
-    @Query("SELECT t FROM Ticket t WHERE t.assignedRole = :role AND t.status = :status")
+    @Query("""
+                SELECT t FROM Ticket t
+                WHERE t.assignedRole = :role AND t.status = :status
+                ORDER BY CASE t.priority
+                    WHEN 'HIGH' THEN 1
+                    WHEN 'MEDIUM' THEN 2
+                    WHEN 'LOW' THEN 3
+                    ELSE 4
+                END
+            """)
     Page<Ticket> findByRoleAndStatus(@Param("role") Role role, @Param("status") TicketStatus status, Pageable pageable);
 
 
