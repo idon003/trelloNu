@@ -54,6 +54,7 @@ public class TicketController {
         return role;
     }
 
+
     // Create ticket, Sancho pass role
     @PostMapping("/createTicket/{role}")
     @Operation(summary = "Create a new ticket")
@@ -76,9 +77,9 @@ public class TicketController {
     @GetMapping("/{status}")
     @Operation(summary = "Get tickets created by the user by status.")
     @PreAuthorize("isAuthenticated()")
-    public ResponseEntity<Page<Ticket>> getTicketsCreatedByUserByStatus(@PathVariable TicketStatus status, @RequestParam int page, @RequestParam int size, Principal principal) {
+    public ResponseEntity<Page<Ticket>> getTicketsCreatedByUserByStatus(@PathVariable TicketStatus status, @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "20") int size, @RequestParam(defaultValue = "priority") String sortBy, @RequestParam(defaultValue = "desc") String direction, Principal principal) {
         UUID userId = getUserIdFromPrincipal(principal);
-        Pageable pageable = PageRequest.of(page, size);
+        Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.fromString(direction), sortBy));
         return ResponseEntity.ok(ticketService.getTicketsByStatus(userId, status, pageable));
     }
 
@@ -87,9 +88,12 @@ public class TicketController {
     @GetMapping("/to-do")
     @Operation(summary = "Get assigned tickets for faculty staff (only in-progress).")
     @PreAuthorize("isAuthenticated()")
-    public ResponseEntity<List<Ticket>> getTicketsAssignedToUser(Principal principal) {
+    public ResponseEntity<Page<Ticket>> getTicketsAssignedToUser(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "20") int size, @RequestParam(defaultValue = "priority") String sortBy, @RequestParam(defaultValue = "desc") String direction, Principal principal) {
+
         UUID userId = getUserIdFromPrincipal(principal);
-        return ResponseEntity.ok(ticketService.getTicketsAssignedTo(userId, TicketStatus.IN_PROGRESS));
+        Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.fromString(direction), sortBy));
+
+        return ResponseEntity.ok(ticketService.getTicketsAssignedTo(userId, TicketStatus.IN_PROGRESS, pageable));
     }
 
     // Staff user assignes ticket to himself (PENDING)
@@ -107,7 +111,7 @@ public class TicketController {
     @GetMapping("/pendingTickets")
     @Operation(summary = "Get pending tickets assigned to the authenticated user's role.")
     @PreAuthorize("isAuthenticated()")
-    public ResponseEntity<Page<Ticket>> getTicketsByRoleAndStatus(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size, @RequestParam(defaultValue = "priority") String sortBy, @RequestParam(defaultValue = "desc") String direction, Principal principal) {
+    public ResponseEntity<Page<Ticket>> getTicketsByRoleAndStatus(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "20") int size, @RequestParam(defaultValue = "priority") String sortBy, @RequestParam(defaultValue = "desc") String direction, Principal principal) {
 
         Role userRole = getUserRoleFromPrincipal(principal);
         Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.fromString(direction), sortBy));
@@ -164,6 +168,17 @@ public class TicketController {
 
         Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.fromString(direction), sortBy));
         return ResponseEntity.ok(ticketService.getAllTickets(pageable));
+    }
+
+    @GetMapping("/completed")
+    @Operation(summary = "Get completed tickets assigned to the authenticated user's role.")
+    @PreAuthorize("isAuthenticated()")
+    public ResponseEntity<Page<Ticket>> getCompletedTicketsByRoleAndStatus(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "20") int size, @RequestParam(defaultValue = "priority") String sortBy, @RequestParam(defaultValue = "desc") String direction, Principal principal) {
+
+        UUID userId = getUserIdFromPrincipal(principal);
+        Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.fromString(direction), sortBy));
+
+        return ResponseEntity.ok(ticketService.getCompletedTicketsByUser(userId, pageable));
     }
 
 
