@@ -26,7 +26,7 @@ public interface TicketRepository extends JpaRepository<Ticket, UUID> {
                     ELSE 4
                 END
             """)
-    Page<Ticket> findByAssignedToAndStatus(UUID assignedTo, TicketStatus status, Pageable pageable);
+    Page<Ticket> findByAssignedToAndStatus(@Param("userId") UUID assignedTo, @Param("status") TicketStatus status, Pageable pageable);
 
     @Query("""
                 SELECT t FROM Ticket t
