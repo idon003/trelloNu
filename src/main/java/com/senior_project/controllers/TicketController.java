@@ -164,9 +164,9 @@ public class TicketController {
     @GetMapping("/all")
     @Operation(summary = "Get all tickets (Admin Only).")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<Page<Ticket>> getAllTickets(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size, @RequestParam(defaultValue = "priority") String sortBy, @RequestParam(defaultValue = "desc") String direction) {
+    public ResponseEntity<Page<Ticket>> getAllTickets(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "20") int size) {
 
-        Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.fromString(direction), sortBy));
+        Pageable pageable = PageRequest.of(page, size);
         return ResponseEntity.ok(ticketService.getAllTickets(pageable));
     }
 
