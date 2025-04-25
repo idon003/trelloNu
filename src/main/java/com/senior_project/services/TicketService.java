@@ -117,12 +117,8 @@ public class TicketService {
 
 
     // Delete a ticket (only the creator can delete)
-    public void deleteTicket(UUID ticketId, UUID userId) {
+    public void deleteTicket(UUID ticketId) {
         Ticket ticket = ticketRepository.findById(ticketId).orElseThrow(() -> new IllegalArgumentException("Ticket not found!"));
-
-        if (!ticket.getCreatedBy().equals(userId)) {
-            throw new SecurityException("You do not have permission to delete this ticket.");
-        }
 
         ticketRepository.delete(ticket);
     }
