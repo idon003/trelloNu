@@ -137,10 +137,9 @@ public class TicketController {
     // Delete ticket, only owner can delete
     @DeleteMapping("/{ticketId}")
     @Operation(summary = "Delete an existing ticket (only if created by the user).")
-    @PreAuthorize("isAuthenticated()")
-    public ResponseEntity<Void> deleteTicket(@PathVariable UUID ticketId, Principal principal) {
-        UUID userId = getUserIdFromPrincipal(principal);
-        ticketService.deleteTicket(ticketId, userId);
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<Void> deleteTicket(@PathVariable UUID ticketId) {
+        ticketService.deleteTicket(ticketId);
         return ResponseEntity.noContent().build();
     }
 
